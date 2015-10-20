@@ -1,2 +1,2 @@
-# computer_vision_ws2015
+# computervision ws2015
 University class
