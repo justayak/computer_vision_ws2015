@@ -44,7 +44,13 @@ def play_video(video, overlay=None):
     for i in range(1, frames):
         frame = video[i]
         if overlay is not None:
-            (x, y, w, h) = overlay[i]
+            (x1, y1, x2, y2) = overlay[i]
+            x = min(x1, x2)
+            y = min(y1, y2)
+            xR = max(x1, x2)
+            yB = max(y1, y2)
+            w = xR - x
+            h = yB - y
             frame[y:y+h, x-LW:x] = RED
             frame[y:y+h, x+w:x+w+LW] = RED
             frame[y+h:y+h+LW, x:x+w] = RED
