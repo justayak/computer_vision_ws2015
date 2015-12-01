@@ -30,18 +30,22 @@ while(1):
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         dst = cv2.calcBackProject([hsv], [0], roi_hist, [0, 180], 1)
 
-        ret, track_window = cv2.meanShift(dst, track_window, term_crit)
+        #ret, track_window = cv2.meanShift(dst, track_window, term_crit)
+        ret, track_window = cv2.CamShift(dst, track_window, term_crit)
 
-        x, y, w, h = track_window
-        img2 = cv2.rectangle(frame, (x, y), (x+w, y+h), 255, 2)
+        #x, y, w, h = track_window
+        pts = cv2.boxPoints(ret)
+        pts = np.int0(pts)
+        #img2 = cv2.rectangle(frame, (x, y), (x+w, y+h), 255, 2)
+        img2 = cv2.polylines(frame, [pts], True, 255, 2)
         cv2.imshow('img2', img2)
+
 
         k = cv2.waitKey(60) & 0xff
         if k == 27:
             break
-        #else:
-            #cv2.imwrite(chr)
     else:
+        a = input("end")
         break
 
 cv2.destroyAllWindows()
