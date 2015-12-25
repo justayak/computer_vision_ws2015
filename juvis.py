@@ -53,9 +53,16 @@ def paint_mats(mats):
     @mats {Matrices}: images to draw
     """
     cols = len(mats)
+    rows = 1
+
+    MAX_ROW = 10
+    
+    if cols > MAX_ROW:
+        rows = int(math.ceil(cols/MAX_ROW))
+        cols = MAX_ROW
 
     fig, axs = plt.subplots(
-    1,
+    rows,
     cols,
     figsize=(32, 16),
     sharex=True,
@@ -64,9 +71,17 @@ def paint_mats(mats):
     i = 0
     try:
         for ax in axs:
-            ax.axis('off')
-            ax.imshow(mats[i], cmap=plt.cm.gray)
-            ax.set_adjustable('box-forced')
+            if hasattr(ax, '__len__'):
+                for ax_sub in ax:
+                    ax_sub.axis('off')
+                    if len(mats) > i:
+                        ax_sub.imshow(mats[i], cmap=plt.cm.gray)
+                        ax_sub.set_adjustable('box-forced')
+                        i += 1
+            else:
+                ax.axis('off')
+                ax.imshow(mats[i], cmap=plt.cm.gray)
+                ax.set_adjustable('box-forced')
             i += 1
     except:
         axs.axis('off')
