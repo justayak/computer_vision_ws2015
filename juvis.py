@@ -2,6 +2,47 @@
 import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
+from os import listdir
+from os.path import isfile, join
+import math
+
+def unify_images(folder_str, size):
+    files = [f for f in listdir(folder_str) if isfile(join(folder_str, f))]
+    size = size, size
+    for f in files:
+        if f.endswith('png'):
+            full_name = join(folder_str, f)
+            thmb_name = full_name + ".thb"
+            im = Image.open(full_name)
+            w, h = im.size
+            if w != h:
+                # not squared: square it!
+                oldsize = str(im.size)
+                if w > h:
+                    cropLeft = int(math.floor((w - h) / 2.0))
+                    cropRight = w - int(math.ceil((w - h)/2.0))
+                    im = im.crop((cropLeft, 0, cropRight, h))
+                else:
+                    cropTop = int(math.floor((h - w)/2.0))
+                    cropBottom = h - int(math.ceil((h - w)/2.0))
+                    im = im.crop((0, cropTop, w, cropBottom))
+                print("resize to: " + str(im.size) + " from " + oldsize)
+            im.thumbnail(size, Image.ANTIALIAS)
+            im.save(thmb_name, "PNG")
+
+def load_images_as_mat(folder_str, extension="png", gray=False):
+    """
+    tbd
+    """
+    files = [join(folder_str, f) for f in listdir(folder_str) 
+            if isfile(join(folder_str, f)) and f.endswith(extension)]
+    mats = []
+    for f in files:
+        if gray:
+            mats.append(np.array(Image.open(f).convert('L')))
+        else:
+            mats.append(np.array(Image.open(f)))
+    return mats
 
 def paint_mats(mats):
     """
