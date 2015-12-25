@@ -6,6 +6,10 @@ from os import listdir
 from os.path import isfile, join
 import math
 
+def vectorize_images(images):
+    """ flattens all images, each image is a row """
+    return np.array([im.copy().flatten() for im in images])
+
 def unify_images(folder_str, size):
     files = [f for f in listdir(folder_str) if isfile(join(folder_str, f))]
     size = size, size
@@ -119,11 +123,13 @@ def pca(X):
     mean_X = X.mean(axis=0)
     X = X - mean_X
 
-    if dim > num_data:
+    if dim > num_data and False:
         M = np.dot(X, X.T)  # covariance matrix
         e, EV = np.linalg.eigh(M)  # eigenval and eigenvec
-        tmp = np.dot(X.T, EV)  # compact trick
+        tmp = np.dot(X.T, EV).T  # compact trick
         V = tmp[::-1]
+        print(M.shape)
+        print(M)
         S = np.sqrt(e)[::-1]  # reverse, eigenvec are in incr. order
         for i in range(V.shape[1]):
             V[:,i] /= S
