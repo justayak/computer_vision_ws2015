@@ -59,7 +59,34 @@ def plot2d(M):
     plt.axis("off")
     plt.show()
 
-def paint_mats(mats, interpolation='bilinear'):
+def normalize(X, Y):
+    N = np.sqrt(X**2 + Y**2)
+    Xn = X/N
+    Yn = Y/N
+    return Xn, Yn
+
+def plot_vec(M):
+    """
+    @M {np.array} Matrix in radians
+    """
+    height = M.shape[0]
+    width = M.shape[1]
+    x = np.linspace(0, width-1, width)
+    y = np.linspace(0, height-1, height)
+
+    X, Y = np.meshgrid(x,y)
+    
+    u = np.cos(X)
+    v = np.sin(Y)
+
+    u, v = normalize(u, v)
+    plt.quiver(X,Y,u,v, pivot='middle', angles='uv', headlength=6)
+    plt.axis('off')
+    plt.xlim(-1, width)
+    plt.ylim(-1, height)
+    plt.show()
+
+def paint_mats(mats, interpolation='bilinear', vmin=0, vmax=255):
     """
     @mats {Matrices}: images to draw
     """
@@ -89,6 +116,8 @@ def paint_mats(mats, interpolation='bilinear'):
                         ax_sub.imshow(
                             mats[i],
                             cmap=plt.cm.gray,
+                            vmin=vmin,
+                            vmax=vmax,
                             interpolation=interpolation)
                         ax_sub.set_adjustable('box-forced')
                         i += 1
@@ -97,6 +126,8 @@ def paint_mats(mats, interpolation='bilinear'):
                 ax.imshow(
                     mats[i],
                     cmap=plt.cm.gray,
+                    vmin=vmin,
+                    vmax=vmax,
                     interpolation=interpolation)
                 ax.set_adjustable('box-forced')
             i += 1
@@ -105,6 +136,8 @@ def paint_mats(mats, interpolation='bilinear'):
         axs.imshow(
             mats[i],
             cmap=plt.cm.gray,
+            vmin=vmin,
+            vmax=vmax,
             interpolation=interpolation)
         axs.set_adjustable('box-forced')
             
