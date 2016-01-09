@@ -1,5 +1,6 @@
 # some computer vision functions
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from PIL import Image
 import numpy as np
 from os import listdir
@@ -48,7 +49,17 @@ def load_images_as_mat(folder_str, extension="png", gray=False):
             mats.append(np.array(Image.open(f)))
     return mats
 
-def paint_mats(mats):
+def plot2d(M):
+    """
+    @M {np.array}
+    Plots the 2d matrix with no interpolation.
+    The higher the value, the brighter the pixel
+    """
+    plt.imshow(M, cm.gray, interpolation="nearest")
+    plt.axis("off")
+    plt.show()
+
+def paint_mats(mats, interpolation='bilinear'):
     """
     @mats {Matrices}: images to draw
     """
@@ -75,17 +86,26 @@ def paint_mats(mats):
                 for ax_sub in ax:
                     ax_sub.axis('off')
                     if len(mats) > i:
-                        ax_sub.imshow(mats[i], cmap=plt.cm.gray)
+                        ax_sub.imshow(
+                            mats[i],
+                            cmap=plt.cm.gray,
+                            interpolation=interpolation)
                         ax_sub.set_adjustable('box-forced')
                         i += 1
             else:
                 ax.axis('off')
-                ax.imshow(mats[i], cmap=plt.cm.gray)
+                ax.imshow(
+                    mats[i],
+                    cmap=plt.cm.gray,
+                    interpolation=interpolation)
                 ax.set_adjustable('box-forced')
             i += 1
     except:
         axs.axis('off')
-        axs.imshow(mats[i], cmap=plt.cm.gray)
+        axs.imshow(
+            mats[i],
+            cmap=plt.cm.gray,
+            interpolation=interpolation)
         axs.set_adjustable('box-forced')
             
     plt.show()
