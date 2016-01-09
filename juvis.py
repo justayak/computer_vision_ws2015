@@ -65,6 +65,14 @@ def normalize(X, Y):
     Yn = Y/N
     return Xn, Yn
 
+def rad2pos(R):
+    """
+    @R {np.array} Matrix in radians
+    """
+    X = np.cos(R)
+    Y = np.sin(R)
+    return X, Y
+
 def plot_vec(M):
     """
     @M {np.array} Matrix in radians
@@ -76,9 +84,10 @@ def plot_vec(M):
 
     X, Y = np.meshgrid(x,y)
     
-    u = np.cos(X)
-    v = np.sin(Y)
-
+    u, v = rad2pos(M)
+    print(u)
+    print("---")
+    print(v)
     u, v = normalize(u, v)
     plt.quiver(X,Y,u,v, pivot='middle', angles='uv', headlength=6)
     plt.axis('off')
