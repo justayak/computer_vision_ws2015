@@ -69,26 +69,25 @@ def rad2pos(R):
     """
     @R {np.array} Matrix in radians
     """
-    X = np.cos(R)
-    Y = np.sin(R)
-    return X, Y
+    X = np.zeros(R.shape)
+    Y = np.zeros(R.shape)
+    
 
-def plot_vec(M):
+    
+    return normalize(X, Y)
+
+def plot_vec(u, v):
     """
-    @M {np.array} Matrix in radians
     """
-    height = M.shape[0]
-    width = M.shape[1]
+    # flip top-bottom as we want the origin to be top/left
+    u = np.flipud(u)
+    v = np.flipud(v)
+    u, v = normalize(u, v)
+    height = u.shape[0]
+    width = v.shape[1]
     x = np.linspace(0, width-1, width)
     y = np.linspace(0, height-1, height)
-
     X, Y = np.meshgrid(x,y)
-    
-    u, v = rad2pos(M)
-    print(u)
-    print("---")
-    print(v)
-    u, v = normalize(u, v)
     plt.quiver(X,Y,u,v, pivot='middle', angles='uv', headlength=6)
     plt.axis('off')
     plt.xlim(-1, width)
