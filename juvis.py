@@ -61,6 +61,8 @@ def plot2d(M):
 
 def normalize(X, Y):
     N = np.sqrt(X**2 + Y**2)
+    Z = (N == 0) * 1
+    N += Z
     Xn = X/N
     Yn = Y/N
     return Xn, Yn
@@ -94,7 +96,7 @@ def plot_vec(u, v):
     plt.ylim(-1, height)
     plt.show()
 
-def paint_mats(mats, interpolation='bilinear', vmin=0, vmax=255):
+def paint_mats(mats, interpolation='bilinear', vmin=None, vmax=None):
     """
     @mats {Matrices}: images to draw
     """
@@ -152,7 +154,7 @@ def paint_mats(mats, interpolation='bilinear', vmin=0, vmax=255):
     plt.show()
 
 def imresize(im, sz):
-    pli_im = Image.fromarray(np.uint8(im))
+    pil_im = Image.fromarray(np.uint8(im))
     return np.array(pil_im.resize(sz))
 
 def histeq(im, nbr_bins=256):
