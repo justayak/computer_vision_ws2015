@@ -96,23 +96,25 @@ def plot_vec(u, v):
     plt.ylim(-1, height)
     plt.show()
 
-def paint_mats(mats, interpolation='bilinear', vmin=None, vmax=None):
+def paint_mats(mats, interpolation='bilinear', vmin=None, vmax=None, max_row=10):
     """
     @mats {Matrices}: images to draw
     """
     cols = len(mats)
     rows = 1
 
-    MAX_ROW = 10
+    MAX_ROW = max_row
     
     if cols > MAX_ROW:
         rows = int(math.ceil(cols/MAX_ROW))
         cols = MAX_ROW
 
+    size = (32, 32)
+
     fig, axs = plt.subplots(
     rows,
     cols,
-    figsize=(32, 16),
+    figsize=size,
     sharex=True,
     sharey=True)
 
@@ -129,7 +131,7 @@ def paint_mats(mats, interpolation='bilinear', vmin=None, vmax=None):
                             vmin=vmin,
                             vmax=vmax,
                             interpolation=interpolation)
-                        ax_sub.set_adjustable('box-forced')
+                        ax_sub.set_adjustable('datalim')
                         i += 1
             else:
                 ax.axis('off')
@@ -140,7 +142,7 @@ def paint_mats(mats, interpolation='bilinear', vmin=None, vmax=None):
                     vmax=vmax,
                     interpolation=interpolation)
                 ax.set_adjustable('box-forced')
-            i += 1
+                i += 1
     except:
         axs.axis('off')
         axs.imshow(
