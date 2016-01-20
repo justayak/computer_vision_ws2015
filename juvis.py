@@ -6,6 +6,7 @@ import numpy as np
 from os import listdir
 from os.path import isfile, join
 import math
+import cv2
 
 def vectorize_images(images):
     """ flattens all images, each image is a row """
@@ -34,6 +35,21 @@ def unify_images(folder_str, size):
                 print("resize to: " + str(im.size) + " from " + oldsize)
             im.thumbnail(size, Image.ANTIALIAS)
             im.save(thmb_name, "PNG")
+
+def load_video_as_mat(video_file):
+    """
+    aa
+    """
+    cam = cv2.VideoCapture(video_file)
+    stream = []
+    if cam.isOpened():
+        ret, img = cam.read()
+        stream.append(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        while ret:
+            ret, img = cam.read()
+            if ret:
+                stream.append(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    return stream
 
 def load_images_as_mat(folder_str, extension="png", gray=False):
     """
