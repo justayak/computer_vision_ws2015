@@ -144,7 +144,7 @@ def plot_mats(mats, cols=5, cmap=plt.get_cmap('gray')):
             if len(currentRow) > 0:
                 add_to_rows()
             currentRow = []
-        currentRow.append(mats[i])
+        currentRow.append(M)
     if len(currentRow) > 0:
         add_to_rows()
     I = np.vstack(rows)
