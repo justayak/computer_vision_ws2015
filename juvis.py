@@ -8,6 +8,22 @@ from os.path import isfile, join
 import math
 import cv2
 
+def imresize(im, sz):
+    pil_im = Image.fromarray(np.uint8(im))
+    return np.array(pil_im.resize(sz))
+
+def extract_points(B):
+    """
+    @param B: {numpy::Array}: Binary image, when value == 0, no point,
+        otherwise: point
+    """
+    result = []
+    for x in range(0, B.shape[1]):
+        for y in range(0, B.shape[0]):
+            if B[y,x] != 0:
+                result.append([y,x])
+    return result
+
 def vectorize_images(images):
     """ flattens all images, each image is a row """
     return np.array([im.copy().flatten() for im in images])
@@ -122,7 +138,7 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
     return value.astype(dtype)
 
 
-def plot_mats(mats, cols=5, cmap=plt.get_cmap('gray')):
+def plot_mats(mats, cols=5, cmap=plt.get_cmap('gray'), size=16):
     SUBSTITUTE = np.zeros_like(mats[0])
     rows = []
     currentRow = []
@@ -149,7 +165,7 @@ def plot_mats(mats, cols=5, cmap=plt.get_cmap('gray')):
         add_to_rows()
     I = np.vstack(rows)
     f, ax = plt.subplots(ncols=1)
-    f.set_size_inches(16,16)
+    f.set_size_inches(size, size)
     ax.imshow(I, cmap=cmap)
     plt.axis('off')
     plt.tight_layout()
@@ -215,10 +231,6 @@ def paint_mats(mats, interpolation='bilinear', vmin=None, vmax=None, max_row=10)
         axs.set_adjustable('box-forced')
             
     plt.show()
-
-def imresize(im, sz):
-    pil_im = Image.fromarray(np.uint8(im))
-    return np.array(pil_im.resize(sz))
 
 def histeq(im, nbr_bins=256):
     """ histogram eq for grayscale img """
