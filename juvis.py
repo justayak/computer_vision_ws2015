@@ -12,6 +12,7 @@ def imresize(im, sz):
     pil_im = Image.fromarray(np.uint8(im))
     return np.array(pil_im.resize(sz))
 
+
 def extract_points(B):
     """
     @param B: {numpy::Array}: Binary image, when value == 0, no point,
